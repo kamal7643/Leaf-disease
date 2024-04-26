@@ -1,14 +1,17 @@
 "use client";
 import React, { useState } from 'react';
-import { Button, Box, Typography } from '@mui/material';
+import { Button, Box, Typography, Select, MenuItem } from '@mui/material';
 import { FaCloudUploadAlt } from 'react-icons/fa';
 
 interface ImageUploaderProps {
-    file: File | null;
-    setFile: (file: File | null) => void;
-  }
+  file: File | null;
+  setFile: (file: File | null) => void;
+  model: String | null;
+  setModel: (model: String | null) => void;
+  handlePost: (image: any, model: any) => void;
+}
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ file, setFile }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({ file, setFile, model, setModel, handlePost }) => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -47,14 +50,27 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ file, setFile }) => {
           Selected file: {file.name}
         </Typography>
       )}
+      <Select
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={model}
+        label="Model"
+        className="mt-4"
+        onChange={(e)=>setModel(e.target.value)}
+      >
+        <MenuItem value={10}>Model 1</MenuItem>
+        <MenuItem value={20}>Model 2</MenuItem>
+        <MenuItem value={30}>Model 3</MenuItem>
+      </Select>
+
       <Button
         variant="contained"
         color="primary"
         className="mt-4"
-        onClick={handleUpload}
         disabled={!file}
+        onClick={()=>{if(model!==null)handlePost(file, model)}}
       >
-        Upload
+        Predict
       </Button>
     </Box>
   );
